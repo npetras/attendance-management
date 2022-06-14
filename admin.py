@@ -1,6 +1,7 @@
 import itertools
 from string import ascii_lowercase
 
+
 class FullSection(Exception):
     pass
 
@@ -9,13 +10,30 @@ class FullSection(Exception):
 
 class Student:
     id_iter = itertools.count(1)
-    def __init__(self, name):
+    def __init__(self, name, avgAttendence: list[int], hereToday: bool):
         self.id = next(self.id_iter)
         self.name = name
+        self.avgAttendence = avgAttendence
+        self.hereToday = hereToday
+    def __repr__(self) -> str:
+        return self.name
 
 
 class Staff:
-    pass
+    def __init__(self) -> None:
+        self.present = 0
+        self.absent = 0
+        self.total = 0
+    def set_section(self, grade: int, section: str):
+        self.grade = grade
+        self.section = section
+    def calc_attendence(self, students):
+        for student in students:
+            if (student.hereToday):
+                self.present += 1
+            else:
+                self.absent += 1
+            self.total += 1
 
 
 class Admin:
@@ -51,10 +69,10 @@ class Admin:
             print(a)
             return
 
-    # add sections
-    # add students to classes
-    # allocate staff to classes
-    #
+    def allocate_staff(self, staff: Staff, grade: int, section: str):
+        staff.set_section(grade, section)
+        staff.calc_attendence(self.data[grade]["Sections"][section])
+    
 
 a = Admin()
 a.add_grade(1)
@@ -68,7 +86,17 @@ a.add_section(2, 'a')
 a.add_section(2, 'b')
 a.add_section(3, 'b')
 a.add_section(3, 'b')
-jeff = Student('Jeff')
+jeff = Student('Jeff', [30, 20, 50], True)
+zeff = Student('Zeff', [60, 29, 90], False)
 a.add_student_to_class(jeff, 2, 'b')
+a.add_student_to_class(zeff, 2, 'b')
+s = Staff()
+a.allocate_staff(s, 2, 'b')
 print(a.data)
+print(s.grade)
+print(s.section)
+print(s.absent)
+print(s.present)
+print(s.total)
+print(jeff)
 
