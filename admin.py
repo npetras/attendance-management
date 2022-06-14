@@ -6,7 +6,7 @@ class FullSection(Exception):
     pass
 
 
-
+studentLookup = {}
 
 class Student:
     id_iter = itertools.count(1)
@@ -15,6 +15,7 @@ class Student:
         self.name = name
         self.avgAttendence = avgAttendence
         self.hereToday = hereToday
+        studentLookup[self.id] = self
     def __repr__(self) -> str:
         return self.name
 
@@ -35,6 +36,15 @@ class Staff:
                 self.absent += 1
             self.total += 1
 
+class User:
+    def __init__(self) -> None:
+        pass
+
+    def get_attendence(self, studentId):
+        print(f"{studentLookup[studentId]}'s attendence report:")
+        print(f"Yearly attendence: {studentLookup[studentId].avgAttendence[0]}%")
+        print(f"Monthly attendence: {studentLookup[studentId].avgAttendence[1]}%")
+        print(f"Weekly attendence: {studentLookup[studentId].avgAttendence[2]}%")
 
 class Admin:
 
@@ -63,6 +73,8 @@ class Admin:
         try:
             if (len(self.data[grade]["Sections"][section]) >= self.data[grade]["Max"]):
                 raise FullSection("Section is full, add student to another section or create a new section")
+            student.grade = grade
+            student.section = section
             self.data[grade]["Sections"][section].append(student)
             self.data[grade]["No of students"] += 1
         except FullSection as a:
@@ -98,5 +110,6 @@ print(s.section)
 print(s.absent)
 print(s.present)
 print(s.total)
-print(jeff)
+u = User()
+u.get_attendence(5)
 
