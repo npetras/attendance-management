@@ -1,22 +1,10 @@
 import itertools
 from string import ascii_lowercase
 
-class Grade:
-    max_students_per_section = 20
-    def __init__(self):
-        self.sections = list()
-
-    def add_section(self, section):
-        self.sections.append(section)
+class FullSection(Exception):
+    pass
 
 
-class GradeSection:
-    def __init__(self, grade, staff):
-        # FIXME: add auto alphabetical ids
-        self.section_id  = None
-        self.grade = grade
-        self.students = list()
-        self.staff = staff
 
 
 class Student:
@@ -33,23 +21,54 @@ class Staff:
 class Admin:
 
     def __init__(self):
-        self.grades = list()
+        
+        self.data = {}
+
 
     # add classes
-    def add_grade(self, grade):
-        self.grades.append(Grade())
+    def add_grade(self, grade: int):
+        if (grade in self.data):
+            print("Grade already exists")
+        else:
+            self.data[grade] = {"No of students": 0, "Max": 20, "Num sections": 0, "Sections": {}}
 
-    def add_section(self, grade):
-        grade_filter = filter(lambda student: if )
+
+    def add_section(self, grade: int, section: str):
+        if (section in self.data[grade]["Sections"]):
+            print("Section already exists")
+        else:
+            self.data[grade]["Sections"][section] = []
+            self.data[grade]["Num sections"] += 1
 
 
-    def add_student_to_class(self, student, student_class):
-
+    def add_student_to_class(self, student: Student, grade: int, section: str):
+        try:
+            if (len(self.data[grade]["Sections"][section]) >= self.data[grade]["Max"]):
+                raise FullSection("Section is full, add student to another section or create a new section")
+            self.data[grade]["Sections"][section].append(student)
+            self.data[grade]["No of students"] += 1
+        except FullSection as a:
+            print(a)
+            return
 
     # add sections
     # add students to classes
     # allocate staff to classes
     #
 
-
+a = Admin()
+a.add_grade(1)
+a.add_grade(2)
+a.add_grade(3)
+a.add_grade(4)
+a.add_section(1, 'a')
+a.add_section(1, 'b')
+a.add_section(1, 'c')
+a.add_section(2, 'a')
+a.add_section(2, 'b')
+a.add_section(3, 'b')
+a.add_section(3, 'b')
+jeff = Student('Jeff')
+a.add_student_to_class(jeff, 2, 'b')
+print(a.data)
 
