@@ -46,7 +46,7 @@ def initialise(admin):
 
 def admin_menu(admin):
     admin_choice = None
-    while admin_choice != 7:
+    while admin_choice != 8:
 
         choices = """
         1. Add Grade (Class)
@@ -70,6 +70,7 @@ def admin_menu(admin):
         # add section under grade
         elif admin_choice == 2:
             try:
+                admin.display_grades()
                 grade = int(input("Grade to add the section under: "))
                 admin.add_section(grade)
             except ValueError:
@@ -92,7 +93,9 @@ def admin_menu(admin):
                 name = input("Staff name: ")
                 department = input("Staff department: ")
                 staff = Staff(name, department)
+                admin.display_grades()
                 grade_id = int(input("Grade: "))
+                # admin.display_sections(grade_id)
                 section_id = int(input("Section: "))
                 admin.allocate_staff_to_section(staff, grade_id, section_id)
             except ValueError:

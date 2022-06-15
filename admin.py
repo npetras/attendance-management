@@ -220,6 +220,12 @@ class Admin:
         section = self.find_staff_section(staff_id)
         section.display_students()
 
+    def display_grades(self):
+        print("Grades", end=" ")
+        for grade in self.grades:
+            print(grade.id, end=" ")
+        print()
+
     def display(self):
         print("Grade \t Max Students in Section \t No. of Sections \t Sections")
         for grade in self.grades:
