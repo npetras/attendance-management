@@ -35,8 +35,8 @@ def show_monthly_attendance(student):
                 count += 1
 
         print(f"Student {student.id} named {student.name}")
-        print(f"Attended {count}/{MONTH} classes last week")
-        print(f"That is {math.trunc((count/MONTH) * 100)}% attendance last week")
+        print(f"Attended {count}/{MONTH} classes last month")
+        print(f"That is {math.trunc((count/MONTH) * 100)}% attendance last month")
     else:
         print("This student has not yet attended a full month of classes")
         count = 0
@@ -57,7 +57,7 @@ def show_yearly_attendance(student):
 
         print(f"Student {student.id} named {student.name}")
         print(f"Attended {count}/{YEAR} classes last year")
-        print(f"That is {math.trunc((count / YEAR) * 100)}% attendance last week")
+        print(f"That is {math.trunc((count / YEAR) * 100)}% attendance last year")
     else:
         print("This student has not yet attended a full year of classes")
         count = 0

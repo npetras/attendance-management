@@ -149,6 +149,8 @@ def user_menu(admin):
                 show_weekly_attendance(student)
             except ValueError:
                 print("Invalid input for one of the fields")
+            except PersonNotFound as e:
+                print(e)
         elif user_choice == 2:
             try:
                 stud_id = int(input("Enter student id: "))
@@ -156,6 +158,8 @@ def user_menu(admin):
                 show_monthly_attendance(student)
             except ValueError:
                 print("Invalid input for one of the fields")
+            except PersonNotFound as e:
+                print(e)
         elif user_choice == 3:
             try:
                 stud_id = int(input("Enter student id: "))
@@ -163,6 +167,8 @@ def user_menu(admin):
                 show_yearly_attendance(student)
             except ValueError:
                 print("Invalid input for one of the fields")
+            except PersonNotFound as e:
+                print(e)
         else:
             print("Invalid choice, try again")
 
