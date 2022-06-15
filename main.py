@@ -55,10 +55,10 @@ def admin_menu(admin):
         4. Allocate Staff to Grade's Section
         5. Take Student Attendance
         6. Print Student Attendance
-        7. Exit
+        7. Print Grades & Sections
+        8. Exit
         """
-        if admin_choice is not None and 0 < admin_choice <= 4:
-            admin.display()
+
         admin_choice = int(input(textwrap.dedent(choices)))
 
         # add grade
@@ -66,47 +66,66 @@ def admin_menu(admin):
             admin.add_grade()
         # add section under grade
         elif admin_choice == 2:
-            grade = int(input("Grade to add the section under: "))
-            admin.add_section(grade)
+            try:
+                grade = int(input("Grade to add the section under: "))
+                admin.add_section(grade)
+            except ValueError:
+                print("Invalid input for one of the fields")
         # add student to grade
         elif admin_choice == 3:
-            print("Please enter student details")
-            name = input("Student name: ")
-            age = int(input("Student age: "))
-            grade = int(input("Grade: "))
-            student = Student(name, age)
-            admin.add_student_to_class(student, grade)
+            try:
+                print("Please enter student details")
+                name = input("Student name: ")
+                age = int(input("Student age: "))
+                grade = int(input("Grade: "))
+                student = Student(name, age)
+                admin.add_student_to_class(student, grade)
+            except ValueError:
+                print("Invalid input for one of the fields")
         # allocate staff to grade section
         elif admin_choice == 4:
-            print("Please enter Staff details")
-            name = input("Student name: ")
-            department = input("Staff department: ")
-            staff = Staff(name, department)
-            grade_id = int(input("Grade: "))
-            section_id = int(input("Section: "))
-            admin.allocate_staff_to_section(staff, grade_id, section_id)
+            try:
+                print("Please enter Staff details")
+                name = input("Staff name: ")
+                department = input("Staff department: ")
+                staff = Staff(name, department)
+                grade_id = int(input("Grade: "))
+                section_id = int(input("Section: "))
+                admin.allocate_staff_to_section(staff, grade_id, section_id)
+            except ValueError:
+                print("Invalid input for one of the fields")
         # take student attendance for today
         elif admin_choice == 5:
-            # enter staff id
-            staff_id = int(input("Enter your Staff ID: "))
-            # print all students for the Grade Section
-            staff_section = admin.find_staff_section(staff_id)
-            admin.display_staffs_section(staff_id)
+            try:
+                staff_id = int(input("Enter your Staff ID: "))
+                staff_section = admin.find_staff_section(staff_id)
+                admin.display_staffs_section(staff_id)
 
-            absent_ids = list(input("Enter the ids of the absent students\nEnter 0 if none are absent: "))
-            absent_ids = [i for i in absent_ids if i != ' ']
-            # for all absent ids
-            for absent_id in absent_ids:
-                mark_student_absent(int(absent_id), staff_section)
-            mark_students_present(absent_ids, staff_section)
+                absent_ids = list(input("Enter the ids of the absent students\nEnter 0 if none are absent: "))
+                absent_ids = [i for i in absent_ids if i != ' ']
+
+                for absent_id in absent_ids:
+                    mark_student_absent(int(absent_id), staff_section)
+                mark_students_present(absent_ids, staff_section)
+            except ValueError:
+                print("Invalid input for one of the fields")
+            except StaffNotFound as e:
+                print(e)
         # print attendance for today
         elif admin_choice == 6:
-            staff_id = int(input("Enter your Staff ID: "))
-            staff_section = admin.find_staff_section(staff_id)
             try:
-                display_last_student_attendance(staff_section)
-            except AttributeError:
-                print(f"Staff ID {staff_id} not found")
+                staff_id = int(input("Enter your Staff ID: "))
+                staff_section = admin.find_staff_section(staff_id)
+                try:
+                    display_last_student_attendance(staff_section)
+                except AttributeError:
+                    print(f"Staff ID {staff_id} not found")
+            except ValueError:
+                print("Invalid input for one of the fields")
+        elif admin_choice == 7:
+            admin.display()
+        elif admin_choice == 8:
+            print("Exiting admin menu...")
         else:
             print("Invalid choice, try again: ")
 

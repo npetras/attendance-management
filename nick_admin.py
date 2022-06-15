@@ -5,6 +5,10 @@ class InvalidSectionId(Exception):
     pass
 
 
+class StaffNotFound(Exception):
+    pass
+
+
 def int_id_to_letter(int_id):
     int_to_letter = {
         1: "a",
@@ -40,6 +44,7 @@ class Grade:
         for section in self.sections:
             if len(section.students) < self.max_students_per_section:
                 section.add_student(student)
+                break
         else:
             new_section = GradeSection(len(self.sections) + 1)
             new_section.add_student(student)
@@ -69,7 +74,7 @@ class GradeSection:
             print(student.display())
 
     def display(self):
-        print(int_id_to_letter(self.id))
+        print(f"Section {int_id_to_letter(self.id)}")
         try:
             print("Teacher: ", end="")
             print(self.staff.display())
@@ -123,6 +128,7 @@ def mark_students_present(absent_ids, section):
         if str(student.id) not in absent_ids:
             student.attendance.append(True)
 
+
 def display_last_student_attendance(section):
     for student in section.students:
         present = ""
@@ -161,11 +167,20 @@ class Admin:
             print(f"The grade {grade_id} does not exist for the new student {student.id} named {student.name}")
 
     def allocate_staff_to_section(self, staff, grade_id, section_id):
-        grade_iterator = filter(lambda g: g.id == grade_id, self.grades)
-        grade_list = list(grade_iterator)
-        section_iterator = filter(lambda s: s.id == section_id, grade_list[0].sections)
-        section_list = list(section_iterator)
-        section_list[0].staff = staff
+        section_iterator = None
+        try:
+            grade_iterator = filter(lambda g: g.id == grade_id, self.grades)
+            grade_list = list(grade_iterator)
+            section_iterator = filter(lambda s: s.id == section_id, grade_list[0].sections)
+        except IndexError:
+            print(f"The grade {grade_id} does not exist for the new staff member")
+        try:
+            section_list = list(section_iterator)
+            section_list[0].staff = staff
+        except TypeError:
+            print(f"The grade {grade_id} does not exist for the new staff member")
+        except IndexError:
+            print(f"The section {section_id} does not exist for the new staff member")
 
     def find_staff_section(self, staff_id):
         staff_section = None
@@ -177,7 +192,10 @@ class Admin:
                         break
                 except AttributeError:
                     continue
-        return staff_section
+        if staff_section is None:
+            raise StaffNotFound(f"Staff ID {staff_id} was not found")
+        else:
+            return staff_section
 
     def find_student(self, student_id):
         student_found = None
@@ -200,7 +218,7 @@ class Admin:
         print("Grade \t Max Students in Section \t No. of Sections \t Sections")
         for grade in self.grades:
             print(grade.display())
-        print("Sections: ")
         for grade in self.grades:
+            print(f"Grade {grade.id}")
             for section in grade.sections:
                 section.display()
