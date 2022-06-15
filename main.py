@@ -1,4 +1,4 @@
-from nick_admin import *
+from admin import *
 from user import *
 
 import textwrap
