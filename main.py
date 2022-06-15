@@ -9,6 +9,7 @@ EXIT_1 = 3
 EXIT_ADMIN = 10
 EXIT_USER = 10
 
+
 def initialise(admin):
     admin.add_grade()
     admin.add_grade()
@@ -147,7 +148,7 @@ def user_menu(admin):
                 3. Show Last Year's Attendance
                 4. Exit
                 """
-        
+
         try:
             user_choice = int(input(textwrap.dedent(choices)))
         except ValueError:
