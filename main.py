@@ -1,3 +1,4 @@
+from random import randint
 from admin import *
 from user import *
 
@@ -19,24 +20,12 @@ def initialise(admin):
     admin.add_section(1)
     admin.add_section(2)
 
-    stud1 = Student("Nicolas", 15)
-    stud2 = Student("Caoimhe", 16)
-    stud3 = Student("Morgan", 14)
-    stud4 = Student("Bill", 17)
+    
+    for i in range(60):
+        admin.add_student_to_class(Student(), randint(1, len(admin.grades)))
+  
 
-    stud1.attendance = [True, True, True, False, True, True, True, True, False, True, True, True, True, False, True,
-                        True, True, True, False, True, True, True, True, False, True, True, True, True, False, True]
-    stud2.attendance = [True, False, False, False, True, True, True, True, False, True, True, True, True, False, True,
-                        True, True, True, False, True, True, True, True, False, True, True, True, False, False, False]
-    stud3.attendance = [True, True, True, False, True, True, True, True, False, True, True, True, True, False, True,
-                        True, True, True, False, True, False, False, True, False, True, True, True, True, False, True]
-    stud4.attendance = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True,
-                        True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
-
-    admin.add_student_to_class(stud1, 1)
-    admin.add_student_to_class(stud2, 1)
-    admin.add_student_to_class(stud3, 1)
-    admin.add_student_to_class(stud4, 2)
+    
 
     staff1 = Staff("John", "ICT")
     staff2 = Staff("Lana", "English")
