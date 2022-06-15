@@ -191,6 +191,7 @@ if __name__ == '__main__':
             user_admin_choice = int(input("1. Admin \t 2. User \t 3. Exit\n"))
         except ValueError:
             print("Please enter a number")
+            user_admin_choice = 0
         if user_admin_choice == 1:
             admin_menu(admin)
         elif user_admin_choice == 2:
