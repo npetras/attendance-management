@@ -1,8 +1,4 @@
 import itertools
-import os
-import random
-
-import numpy as np
 
 
 class InvalidSectionId(Exception):
@@ -89,19 +85,8 @@ class GradeSection:
 
 
 class Person:
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    names = dir_path + "./names.txt"
-    firstnames = []
-    surnames = []
-    with open(names) as n:
-        for line in itertools.islice(n, 0, 60):
-            firstnames.append(line[0:-1])
-        for line in itertools.islice(n, 0, 60):
-            surnames.append(line[0:-1])
-
-    
-    def __init__(self):
-        self.name = self.firstnames[random.randint(0, 59)] + " " + self.surnames[random.randint(0, 59)]
+    def __init__(self, name):
+        self.name = name
 
     def display(self):
         print(f"Name: {self.name}", end=" ")
@@ -110,12 +95,11 @@ class Person:
 class Student(Person):
     id_iter = itertools.count(1)
 
-    def __init__(self, x):
+    def __init__(self, name, age):
         self.id = next(self.id_iter)
-        super().__init__()
-        self.age = random.randint(11, 18)
-        self.attendance = [bool(np.random.choice([0,1], p=[1-x, x])) for i in range(100)]
-        
+        super().__init__(name)
+        self.age = age
+        self.attendance = list()
 
     def display(self):
         print(f"ID: {self.id}", f"Name: {self.name}", f"Age: {self.age}", end=" ")
@@ -126,7 +110,7 @@ class Staff(Person):
 
     def __init__(self, name, department):
         self.id = next(self.id_iter)
-        super().__init__()
+        super().__init__(name)
         self.department = department
 
     def display(self):

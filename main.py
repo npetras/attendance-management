@@ -1,4 +1,3 @@
-from random import randint, randrange
 from admin import *
 from user import *
 
@@ -10,7 +9,6 @@ EXIT_1 = 3
 EXIT_ADMIN = 10
 EXIT_USER = 10
 
-
 def initialise(admin):
     admin.add_grade()
     admin.add_grade()
@@ -20,12 +18,25 @@ def initialise(admin):
     admin.add_section(1)
     admin.add_section(2)
 
-    
-    for i in range(60):
-        admin.add_student_to_class(Student(randrange(10, 99) / 100), randint(1, len(admin.grades)))
-  
+    stud1 = Student("Nicolas", 15)
+    stud2 = Student("Caoimhe", 16)
+    stud3 = Student("Morgan", 14)
+    stud4 = Student("Bill", 17)
 
-    
+    stud1.attendance = [True, True, True, False, True, True, True, True, False, True, True, True, True, False, True,
+                        True, True, True, False, True, True, True, True, False, True, True, True, True, False, True]
+    stud2.attendance = [True, False, False, False, True, True, True, True, False, True, True, True, True, False, True,
+                        True, True, True, False, True, True, True, True, False, True, True, True, False, False, False]
+    stud3.attendance = [True, True, True, False, True, True, True, True, False, True, True, True, True, False, True,
+                        True, True, True, False, True, False, False, True, False, True, True, True, True, False, True]
+    stud4.attendance = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True,
+                        True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
+
+    admin.add_student_to_class(stud1, 1)
+    admin.add_student_to_class(stud2, 1)
+    admin.add_student_to_class(stud3, 1)
+    admin.add_student_to_class(stud4, 2)
+    admin.add_student_to_class(stud4, 2)
 
     staff1 = Staff("John", "ICT")
     staff2 = Staff("Lana", "English")
@@ -60,7 +71,6 @@ def admin_menu(admin):
         # add section under grade
         elif admin_choice == 2:
             try:
-                admin.display_grades()
                 grade = int(input("Grade to add the section under: "))
                 admin.add_section(grade)
             except ValueError:
@@ -83,9 +93,7 @@ def admin_menu(admin):
                 name = input("Staff name: ")
                 department = input("Staff department: ")
                 staff = Staff(name, department)
-                admin.display_grades()
                 grade_id = int(input("Grade: "))
-                # admin.display_sections(grade_id)
                 section_id = int(input("Section: "))
                 admin.allocate_staff_to_section(staff, grade_id, section_id)
             except ValueError:
@@ -137,7 +145,7 @@ def user_menu(admin):
                 3. Show Last Year's Attendance
                 4. Exit
                 """
-
+        
         try:
             user_choice = int(input(textwrap.dedent(choices)))
         except ValueError:
@@ -174,7 +182,7 @@ def user_menu(admin):
 
 
 if __name__ == '__main__':
-
+    
     admin = Admin()
     initialise(admin)
     user_admin_choice = None
