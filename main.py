@@ -1,4 +1,5 @@
 from nick_admin import *
+from user import *
 
 import textwrap
 
@@ -23,6 +24,15 @@ def initialise(admin):
     stud3 = Student("Morgan", 14)
     stud4 = Student("Bill", 17)
 
+    stud1.attendance = [True, True, True, False, True, True, True, True, False, True, True, True, True, False, True,
+                        True, True, True, False, True, True, True, True, False, True, True, True, True, False, True]
+    stud2.attendance = [True, False, False, False, True, True, True, True, False, True, True, True, True, False, True,
+                        True, True, True, False, True, True, True, True, False, True, True, True, False, False, False]
+    stud3.attendance = [True, True, True, False, True, True, True, True, False, True, True, True, True, False, True,
+                        True, True, True, False, True, False, False, True, False, True, True, True, True, False, True]
+    stud4.attendance = [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True,
+                        True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]
+
     admin.add_student_to_class(stud1, 1)
     admin.add_student_to_class(stud2, 1)
     admin.add_student_to_class(stud3, 1)
@@ -32,84 +42,113 @@ def initialise(admin):
     staff2 = Staff("Lana", "English")
 
     admin.allocate_staff_to_section(staff1, 1, 1)
-    admin.allocate_staff_to_section(staff1, 1, 2)
+    admin.allocate_staff_to_section(staff2, 1, 2)
 
 
 def admin_menu(admin):
-    choices = """
-    1. Add Grade (Class)
-    2. Add Section under Grade
-    3. Add Student to Grade & Section
-    4. Allocate Staff to Grade's Section
-    5. Take Student Attendance
-    6. Print Student Attendance
-    """
+    admin_choice = None
+    while admin_choice != 7:
 
-    admin.display()
-    admin_choice = int(input(textwrap.dedent(choices)))
+        choices = """
+        1. Add Grade (Class)
+        2. Add Section under Grade
+        3. Add Student to Grade & Section
+        4. Allocate Staff to Grade's Section
+        5. Take Student Attendance
+        6. Print Student Attendance
+        7. Exit
+        """
+        if admin_choice is not None and 0 < admin_choice <= 4:
+            admin.display()
+        admin_choice = int(input(textwrap.dedent(choices)))
 
-    # add grade
-    if admin_choice == 1:
-        admin.add_grade()
-    # add section under grade
-    elif admin_choice == 2:
-        grade = int(input("Grade to add the section under: "))
-        admin.add_section(grade)
-    # add student to grade
-    elif admin_choice == 3:
-        print("Please enter student details")
-        name = input("Student name: ")
-        age = int(input("Student age: "))
-        grade = int(input("Grade: "))
-        student = Student(name, age)
-        admin.add_student_to_class(student, grade)
-    # allocate staff to grade section
-    elif admin_choice == 4:
-        print("Please enter Staff details")
-        name = input("Student name: ")
-        department = input("Staff department: ")
-        staff = Staff(name, department)
-        grade_id = int(input("Grade: "))
-        section_id = int(input("Section: "))
-        admin.allocate_staff_to_section(staff, grade_id, section_id)
-    # take student attendance for today
-    elif admin_choice == 5:
-        # enter staff id
-        staff_id = int(input("Enter your Staff ID: "))
-        # print all students for the Grade Section
-        section_iterator = filter(lambda s: s.staff.id == staff_id, admin.grades.sections)
-        grade_list = list(section_iterator)
-        grade_list[0].displayStudents()
+        # add grade
+        if admin_choice == 1:
+            admin.add_grade()
+        # add section under grade
+        elif admin_choice == 2:
+            grade = int(input("Grade to add the section under: "))
+            admin.add_section(grade)
+        # add student to grade
+        elif admin_choice == 3:
+            print("Please enter student details")
+            name = input("Student name: ")
+            age = int(input("Student age: "))
+            grade = int(input("Grade: "))
+            student = Student(name, age)
+            admin.add_student_to_class(student, grade)
+        # allocate staff to grade section
+        elif admin_choice == 4:
+            print("Please enter Staff details")
+            name = input("Student name: ")
+            department = input("Staff department: ")
+            staff = Staff(name, department)
+            grade_id = int(input("Grade: "))
+            section_id = int(input("Section: "))
+            admin.allocate_staff_to_section(staff, grade_id, section_id)
+        # take student attendance for today
+        elif admin_choice == 5:
+            # enter staff id
+            staff_id = int(input("Enter your Staff ID: "))
+            # print all students for the Grade Section
+            staff_section = admin.find_staff_section(staff_id)
+            admin.display_staffs_section(staff_id)
 
-        # ask which ones are absent, enter 0 for no absences
-        # for all absent ids
-        # mark student as absent
-        # for all non-absent ids
-        # mark them as present
-        pass
-    # print attendance for today
-    elif admin_choice == 6:
-        admin.display_last_student_attendance()
-        pass
-    else:
-        print("Invalid choice, try again: ")
+            absent_ids = list(input("Enter the ids of the absent students\nEnter 0 if none are absent: "))
+            absent_ids = [i for i in absent_ids if i != ' ']
+            # for all absent ids
+            for absent_id in absent_ids:
+                mark_student_absent(int(absent_id), staff_section)
+            mark_students_present(absent_ids, staff_section)
+        # print attendance for today
+        elif admin_choice == 6:
+            staff_id = int(input("Enter your Staff ID: "))
+            staff_section = admin.find_staff_section(staff_id)
+            display_last_student_attendance(staff_section)
+            pass
+        else:
+            print("Invalid choice, try again: ")
 
 
-def user_menu():
-    pass
+def user_menu(admin):
+    user_choice = None
+    while user_choice != 4:
+
+        choices = """
+                1. Show Last Week's Attendance
+                2. Show Last Month's Attendance
+                3. Show Last Year's Attendance
+                4. Exit
+                """
+        user_choice = int(input(textwrap.dedent(choices)))
+        if user_choice == 1:
+            stud_id = int(input("Enter student id: "))
+            student = admin.find_student(stud_id)
+            show_weekly_attendance(student)
+        elif user_choice == 2:
+            stud_id = int(input("Enter student id: "))
+            student = admin.find_student(stud_id)
+            show_monthly_attendance(student)
+        elif user_choice == 3:
+            stud_id = int(input("Enter student id: "))
+            student = admin.find_student(stud_id)
+            show_yearly_attendance(student)
+        else:
+            print("Invalid choice, try again")
 
 
 if __name__ == '__main__':
 
     admin = Admin()
     initialise(admin)
-    user_admin_choice = int(input("1. Admin \t 2. User \t 3. Exit\n"))
+    user_admin_choice = None
 
     while user_admin_choice != EXIT_1:
+        user_admin_choice = int(input("1. Admin \t 2. User \t 3. Exit\n"))
         if user_admin_choice == 1:
             admin_menu(admin)
         elif user_admin_choice == 2:
-            user_menu()
+            user_menu(admin)
         elif user_admin_choice == 3:
             print("Exiting program")
         else:
