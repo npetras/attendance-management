@@ -2,6 +2,8 @@ import itertools
 import os
 import random
 
+import numpy as np
+
 
 class InvalidSectionId(Exception):
     pass
@@ -108,11 +110,12 @@ class Person:
 class Student(Person):
     id_iter = itertools.count(1)
 
-    def __init__(self):
+    def __init__(self, x):
         self.id = next(self.id_iter)
         super().__init__()
         self.age = random.randint(11, 18)
-        self.attendance = [bool(random.getrandbits(1)) for i in range(100)]
+        self.attendance = [bool(np.random.choice([0,1], p=[1-x, x])) for i in range(100)]
+        
 
     def display(self):
         print(f"ID: {self.id}", f"Name: {self.name}", f"Age: {self.age}", end=" ")
