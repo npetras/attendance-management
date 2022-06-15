@@ -5,7 +5,7 @@ class InvalidSectionId(Exception):
     pass
 
 
-class StaffNotFound(Exception):
+class PersonNotFound(Exception):
     pass
 
 
@@ -118,9 +118,12 @@ class Staff(Person):
 
 
 def mark_student_absent(absent_id, section):
-    student_filter = filter(lambda s: s.id == absent_id, section.students)
-    student_list = list(student_filter)
-    student_list[0].attendance.append(False)
+    try:
+        student_filter = filter(lambda s: s.id == absent_id, section.students)
+        student_list = list(student_filter)
+        student_list[0].attendance.append(False)
+    except IndexError:
+        print(f"Student {absent_id} not found ")
 
 
 def mark_students_present(absent_ids, section):
@@ -193,7 +196,7 @@ class Admin:
                 except AttributeError:
                     continue
         if staff_section is None:
-            raise StaffNotFound(f"Staff ID {staff_id} was not found")
+            raise PersonNotFound(f"Person ID {staff_id} was not found")
         else:
             return staff_section
 
@@ -208,7 +211,10 @@ class Admin:
                             break
                     except AttributeError:
                         continue
-        return student_found
+        if student_found is None:
+            raise PersonNotFound(f"Person ID {student_id} was not found")
+        else:
+            return student_found
 
     def display_staffs_section(self, staff_id):
         section = self.find_staff_section(staff_id)
