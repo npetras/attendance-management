@@ -140,21 +140,25 @@ class Admin:
 
     # add classes
     def add_grade(self):
-        # print("Adding grade")
         self.grades.append(Grade())
 
     def add_section(self, grade_id):
-        # print(f"Adding section to grade {grade_id}")
-        grade_iterator = filter(lambda g: g.id == grade_id, self.grades)
-        grade_list = list(grade_iterator)
-        section_id = len(grade_list[0].sections) + 1
-        section = GradeSection(section_id)
-        grade_list[0].add_section(section)
+        try:
+            grade_iterator = filter(lambda g: g.id == grade_id, self.grades)
+            grade_list = list(grade_iterator)
+            section_id = len(grade_list[0].sections) + 1
+            section = GradeSection(section_id)
+            grade_list[0].add_section(section)
+        except IndexError:
+            print(f"The grade {grade_id} does not exist for the new section to be added")
 
     def add_student_to_class(self, student, grade_id):
-        grade_iterator = filter(lambda g: g.id == grade_id, self.grades)
-        grade_list = list(grade_iterator)
-        grade_list[0].add_student(student)
+        try:
+            grade_iterator = filter(lambda g: g.id == grade_id, self.grades)
+            grade_list = list(grade_iterator)
+            grade_list[0].add_student(student)
+        except IndexError:
+            print(f"The grade {grade_id} does not exist for the new student {student.id} named {student.name}")
 
     def allocate_staff_to_section(self, staff, grade_id, section_id):
         grade_iterator = filter(lambda g: g.id == grade_id, self.grades)

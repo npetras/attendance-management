@@ -9,7 +9,6 @@ EXIT_1 = 3
 EXIT_ADMIN = 10
 EXIT_USER = 10
 
-
 def initialise(admin):
     admin.add_grade()
     admin.add_grade()
@@ -104,8 +103,10 @@ def admin_menu(admin):
         elif admin_choice == 6:
             staff_id = int(input("Enter your Staff ID: "))
             staff_section = admin.find_staff_section(staff_id)
-            display_last_student_attendance(staff_section)
-            pass
+            try:
+                display_last_student_attendance(staff_section)
+            except AttributeError:
+                print(f"Staff ID {staff_id} not found")
         else:
             print("Invalid choice, try again: ")
 
