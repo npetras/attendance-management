@@ -88,7 +88,7 @@ class GradeSection:
 
 class Person:
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    names = dir_path + "./names.txt"
+    names = dir_path + "/names.txt"
     firstnames = []
     surnames = []
     with open(names) as n:
