@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, randrange
 from admin import *
 from user import *
 
@@ -22,7 +22,7 @@ def initialise(admin):
 
     
     for i in range(60):
-        admin.add_student_to_class(Student(), randint(1, len(admin.grades)))
+        admin.add_student_to_class(Student(randrange(10, 99) / 100), randint(1, len(admin.grades)))
   
 
     
