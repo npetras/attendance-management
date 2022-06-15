@@ -5,6 +5,8 @@ from string import ascii_lowercase
 class FullSection(Exception):
     pass
 
+class AlreadyInSection(Exception):
+    pass
 
 studentLookup = {}
 
@@ -72,18 +74,22 @@ class Admin:
     def add_student_to_class(self, student: Student, grade: int, section: str):
         try:
             if (len(self.data[grade]["Sections"][section]) >= self.data[grade]["Max"]):
-                raise FullSection("Section is full, add student to another section or create a new section")
+                raise FullSection("Section is full, add student to another section or create a new section") #section at max capacity
+            if (student in self.data[grade]["Sections"][section]):
+                raise AlreadyInSection("Student has already been assinged to this class and section") #student must be unique to a section
             student.grade = grade
-            student.section = section
-            self.data[grade]["Sections"][section].append(student)
-            self.data[grade]["No of students"] += 1
+            student.section = section #set student grade and section
+            self.data[grade]["Sections"][section].append(student) #add student to list
+            self.data[grade]["No of students"] += 1 #increment num students in that grade
         except FullSection as a:
             print(a)
             return
+        except AlreadyInSection as e:
+            print(e)
 
     def allocate_staff(self, staff: Staff, grade: int, section: str):
-        staff.set_section(grade, section)
-        staff.calc_attendence(self.data[grade]["Sections"][section])
+        staff.set_section(grade, section) #allocate staff member to section 
+        staff.calc_attendence(self.data[grade]["Sections"][section]) #calculate attendence
     
 
 a = Admin()
@@ -101,6 +107,7 @@ a.add_section(3, 'b')
 jeff = Student('Jeff', [30, 20, 50], True)
 zeff = Student('Zeff', [60, 29, 90], False)
 a.add_student_to_class(jeff, 2, 'b')
+a.add_student_to_class(zeff, 2, 'b')
 a.add_student_to_class(zeff, 2, 'b')
 s = Staff()
 a.allocate_staff(s, 2, 'b')
