@@ -43,10 +43,13 @@ class User:
         pass
 
     def get_attendence(self, studentId):
-        print(f"{studentLookup[studentId]}'s attendence report:")
-        print(f"Yearly attendence: {studentLookup[studentId].avgAttendence[0]}%")
-        print(f"Monthly attendence: {studentLookup[studentId].avgAttendence[1]}%")
-        print(f"Weekly attendence: {studentLookup[studentId].avgAttendence[2]}%")
+        try:
+            print(f"{studentLookup[studentId]}'s attendence report:")
+            print(f"Yearly attendence: {studentLookup[studentId].avgAttendence[0]}%")
+            print(f"Monthly attendence: {studentLookup[studentId].avgAttendence[1]}%")
+            print(f"Weekly attendence: {studentLookup[studentId].avgAttendence[2]}%")
+        except KeyError:
+            print("Student not found")
 
 class Admin:
 
@@ -120,3 +123,4 @@ print(s.total)
 u = User()
 u.get_attendence(5)
 
+print("adfgd")
