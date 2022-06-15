@@ -104,12 +104,13 @@ def admin_menu(admin):
                 absent_ids = list(input("Enter the ids of the absent students\nEnter 0 if none are absent: "))
                 absent_ids = [i for i in absent_ids if i != ' ']
 
-                for absent_id in absent_ids:
-                    mark_student_absent(int(absent_id), staff_section)
+                if "0" not in absent_ids:
+                    for absent_id in absent_ids:
+                        mark_student_absent(int(absent_id), staff_section)
                 mark_students_present(absent_ids, staff_section)
             except ValueError:
                 print("Invalid input for one of the fields")
-            except StaffNotFound as e:
+            except PersonNotFound as e:
                 print(e)
         # print attendance for today
         elif admin_choice == 6:
@@ -142,17 +143,26 @@ def user_menu(admin):
                 """
         user_choice = int(input(textwrap.dedent(choices)))
         if user_choice == 1:
-            stud_id = int(input("Enter student id: "))
-            student = admin.find_student(stud_id)
-            show_weekly_attendance(student)
+            try:
+                stud_id = int(input("Enter student id: "))
+                student = admin.find_student(stud_id)
+                show_weekly_attendance(student)
+            except ValueError:
+                print("Invalid input for one of the fields")
         elif user_choice == 2:
-            stud_id = int(input("Enter student id: "))
-            student = admin.find_student(stud_id)
-            show_monthly_attendance(student)
+            try:
+                stud_id = int(input("Enter student id: "))
+                student = admin.find_student(stud_id)
+                show_monthly_attendance(student)
+            except ValueError:
+                print("Invalid input for one of the fields")
         elif user_choice == 3:
-            stud_id = int(input("Enter student id: "))
-            student = admin.find_student(stud_id)
-            show_yearly_attendance(student)
+            try:
+                stud_id = int(input("Enter student id: "))
+                student = admin.find_student(stud_id)
+                show_yearly_attendance(student)
+            except ValueError:
+                print("Invalid input for one of the fields")
         else:
             print("Invalid choice, try again")
 
