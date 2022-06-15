@@ -59,7 +59,10 @@ def admin_menu(admin):
         8. Exit
         """
 
-        admin_choice = int(input(textwrap.dedent(choices)))
+        try:
+            admin_choice = int(input(textwrap.dedent(choices)))
+        except ValueError:
+            print("Please enter a number")
 
         # add grade
         if admin_choice == 1:
@@ -141,7 +144,11 @@ def user_menu(admin):
                 3. Show Last Year's Attendance
                 4. Exit
                 """
-        user_choice = int(input(textwrap.dedent(choices)))
+        
+        try:
+            user_choice = int(input(textwrap.dedent(choices)))
+        except ValueError:
+            print("Please enter a number")
         if user_choice == 1:
             try:
                 stud_id = int(input("Enter student id: "))
@@ -180,7 +187,10 @@ if __name__ == '__main__':
     user_admin_choice = None
 
     while user_admin_choice != EXIT_1:
-        user_admin_choice = int(input("1. Admin \t 2. User \t 3. Exit\n"))
+        try:
+            user_admin_choice = int(input("1. Admin \t 2. User \t 3. Exit\n"))
+        except ValueError:
+            print("Please enter a number")
         if user_admin_choice == 1:
             admin_menu(admin)
         elif user_admin_choice == 2:
